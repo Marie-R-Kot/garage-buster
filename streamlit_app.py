@@ -1,4 +1,5 @@
 import folium
+from folium import Element
 import streamlit as st
 from streamlit_folium import st_folium
 
@@ -59,11 +60,21 @@ if st.session_state.step == "start":
     m = folium.Map(
         location=st.session_state.map_center,
         zoom_start=ZOOM,
-        tiles="OpenStreetMap",
         zoom_control=False,
         scrollWheelZoom=False,
         dragging=True,
     )
+
+    # убираем политическме надписи в виджете
+    css_hide_attribution = """
+    <style>
+    .leaflet-control-attribution {
+        display: none !important;
+    }
+    </style>
+    """
+    m.get_root().header.add_child(Element(css_hide_attribution))
+
     output = st_folium(
         m,
         width="100%",
