@@ -137,7 +137,7 @@ elif st.session_state.step == "checked":
         st.image(image_url, caption="Область поиска", width="stretch")
 
     with right:
-        # Получаем и отображаем ОБОГАЩЁННУЮ таблицу
+        # получаем и отображаем уже обогащённую Росреестром таблицу
         table_data = render_garage_data("checked", coords_str)
         if table_data:
             st.write("##### Найденные объекты")
