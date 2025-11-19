@@ -5,10 +5,10 @@ streamlit-folium
 pandas
 matplotlib
 scikit-learn
-ultralytics
 opencv-python-headless
 pillow
 torch
+ultralytics
 
 
 # streamlit>=1.28.0
