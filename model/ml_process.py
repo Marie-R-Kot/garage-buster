@@ -19,7 +19,7 @@ def model_staff(image_url):
         conf=0.25,
         iou=0.5,    
         imgsz=1280,    
-        save=True,     
+        save=False,     
         save_txt=False,  
         show=False      
     )
