@@ -68,7 +68,7 @@ def return_results_from_reestr(coords: list):
         print(lat, lon)
         res = get_property_by_coords(lat, lon)
         if not res:
-            results.append("No data")
+            results.append("Нет данных")
         else:
             results.append(res["cadastral_number"])
 
