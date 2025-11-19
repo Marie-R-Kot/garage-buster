@@ -2,7 +2,7 @@ import requests
 import io
 from PIL import Image
 from ultralytics import YOLO
-
+import cv2
 import os
 from pathlib import Path
 
