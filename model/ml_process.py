@@ -3,7 +3,9 @@ import io
 from PIL import Image
 from ultralytics import YOLO
 
-   
+import os
+from pathlib import Path
+
 def model_staff(image_url):
     response = requests.get(image_url)
     image = Image.open(io.BytesIO(response.content))
@@ -14,7 +16,15 @@ def model_staff(image_url):
     # model_path = 'model/runs/detect'
     # model = YOLO(f'{model_path}/train/weights/best.pt')
     
-    model = YOLO('model/best.pt')
+    base_dir = Path(__file__).parent.parent
+    model_path = base_dir / 'model' / 'best.pt'
+    
+    # Проверяем существование файла
+    if not model_path.exists():
+        raise FileNotFoundError(f"Model file not found at: {model_path}")
+    
+    model = YOLO(str(model_path))
+    
     results = model(
         image,
         conf=0.25,
