@@ -1,5 +1,6 @@
 import math
 import requests
+import streamlit as st
 
 
 def lonlat_to_mercator(lon, lat):
@@ -20,7 +21,7 @@ def get_property_by_coords(lat: float, lon: float) -> dict | None:
     """
     x, y = lonlat_to_mercator(lon, lat)
 
-    url = "https://map.ru/api/wms"
+    url = st.secrets['ROSREESTR_URL']
     params = {
         "x": x,
         "y": y,
