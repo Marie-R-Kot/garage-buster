@@ -1,0 +1,6 @@
+main_folder: 'dataset'
+coor_file_name: 'metadata.csv'
+label_folder: 'raw_labels'
+size: 1280
+zoom: 18
+url_file_name: 'data.txt'

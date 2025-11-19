@@ -3,8 +3,8 @@ from folium import Element
 import streamlit as st
 from streamlit_folium import st_folium
 
-from clients.maps import get_coords_by_address, get_static_map_url
-from model.ml_process import render_garage_data
+from clients.map_manager import get_coords_by_address, get_url
+from map_processing import render_garage_data
 
 # константы
 ZOOM = 16
@@ -96,7 +96,7 @@ if st.session_state.step == "start":
 elif st.session_state.step == "found":
     lat, lon = st.session_state.map_center
     coords_str = f"{lat},{lon}"
-    image_url = get_static_map_url(lat, lon)
+    image_url = get_url([lat, lon])
 
     left, right = st.columns(2)
 
@@ -109,7 +109,7 @@ elif st.session_state.step == "found":
 
     with right:
         # Получаем и отображаем таблицу найденных объектов
-        table_data = render_garage_data("found", coords_str)
+        table_data = render_garage_data("found", [lat, lon])
         if table_data:
             st.write("##### Найденные объекты")
             st.table(table_data)
@@ -129,7 +129,7 @@ elif st.session_state.step == "found":
 elif st.session_state.step == "checked":
     lat, lon = st.session_state.map_center
     coords_str = f"{lat},{lon}"
-    image_url = get_static_map_url(lat, lon)
+    image_url = get_url([lat, lon])
 
     left, right = st.columns(2)
 
@@ -138,7 +138,7 @@ elif st.session_state.step == "checked":
 
     with right:
         # получаем и отображаем уже обогащённую Росреестром таблицу
-        table_data = render_garage_data("checked", coords_str)
+        table_data = render_garage_data("checked", [lat, lon])
         if table_data:
             st.write("##### Найденные объекты")
             st.table(table_data)

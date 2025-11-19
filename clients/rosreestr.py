@@ -18,7 +18,7 @@ def get_property_by_coords(lat: float, lon: float) -> dict | None:
     """
     Получаем данные об объекте недвижимости по координатам через map.ru
     """
-    x, y = lonlat_to_mercator(lon, lat)  # ⚠️ lon, lat!
+    x, y = lonlat_to_mercator(lon, lat) 
 
     url = "https://map.ru/api/wms"
     params = {
@@ -34,6 +34,7 @@ def get_property_by_coords(lat: float, lon: float) -> dict | None:
 
     try:
         response = requests.get(url, params=params, headers=headers, timeout=10)
+        response.raise_for_status()
         if response.status_code == 200:
             data = response.json()
             if data.get("features"):
@@ -52,3 +53,17 @@ def get_property_by_coords(lat: float, lon: float) -> dict | None:
         print(f"Ошибка запроса к map.ru: {e}")
 
     return None
+
+def return_answer(coords: str):
+    results = []
+    for coord in coords:
+        lat, lon = [round(float(x), 6) for x in coord.split(', ')]
+        print(lat, lon)
+        res = get_property_by_coords(lat, lon)
+        if not res:
+            results.append('No data')
+        else:
+            results.append(res['cadastral_number'])
+        
+    print(results)
+    return results
