@@ -1,9 +1,7 @@
 import requests
 import io
-#from ultralytics import YOLO
 from PIL import Image
-import sys
-import subprocess
+from ultralytics import YOLO
 
    
 def model_staff(image_url):
