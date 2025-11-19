@@ -2,6 +2,11 @@ import requests
 import io
 from ultralytics import YOLO
 from PIL import Image
+import sys
+import subprocess
+
+def install_package(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 def model_staff(image_url):
     response = requests.get(image_url)
