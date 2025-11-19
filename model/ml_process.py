@@ -1,6 +1,7 @@
 import requests
 import io
 #from ultralytics import YOLO
+import cv2
 from PIL import Image
 import sys
 import subprocess
