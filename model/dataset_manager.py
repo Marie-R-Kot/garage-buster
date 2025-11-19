@@ -1,6 +1,5 @@
 import os
 import requests
-#import json
 import yaml
 import pandas as pd
 from pathlib import Path
