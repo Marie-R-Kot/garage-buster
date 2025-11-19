@@ -114,8 +114,8 @@ elif st.session_state.step == "found":
 
     with right:
         # отображаем таблицу найденных объектов
-        table_data = render_garage_data("found", st.session_state.garage_coords)
-        if table_data:
+        if st.session_state.garage_coords:
+            table_data = render_garage_data("found", st.session_state.garage_coords)
             st.write("##### Найденные объекты")
             st.table(table_data)
             
