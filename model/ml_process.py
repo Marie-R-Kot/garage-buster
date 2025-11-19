@@ -1,6 +1,6 @@
 import requests
 import io
-from ultralytics import YOLO
+#from ultralytics import YOLO
 from PIL import Image
 import sys
 import subprocess
@@ -8,6 +8,13 @@ import subprocess
 def install_package(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
+try:
+    from ultralytics import YOLO
+except ImportError:
+    install_package("opencv-python-headless")
+    install_package("ultralytics")
+    from ultralytics import YOLO
+    
 def model_staff(image_url):
     response = requests.get(image_url)
     image = Image.open(io.BytesIO(response.content))
