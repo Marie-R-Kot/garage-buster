@@ -118,16 +118,17 @@ elif st.session_state.step == "found":
         if table_data:
             st.write("##### Найденные объекты")
             st.table(table_data)
+            
+            st.button(
+                "Проверить объекты в Росреестре",
+                width="stretch",
+                type="primary",
+                on_click=check_in_registry,
+            )
         else:
             st.info("Подозрительные объекты не обнаружены. Выберите другую область :)")
 
         # Кнопки
-        st.button(
-            "Проверить объекты в Росреестре",
-            width="stretch",
-            type="primary",
-            on_click=check_in_registry,
-        )
         st.button("← Назад", width="stretch", on_click=reset)
 
 # шаг 3: проверка в Росреестре
