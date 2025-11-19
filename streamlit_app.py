@@ -4,9 +4,11 @@ import streamlit as st
 from streamlit_folium import st_folium
 
 from clients.map_manager import get_coords_by_address, get_url
-from map_processing import render_garage_data
+from table_processing import render_garage_data
+from model.ml_process import get_coords_from_model
+from clients.rosreestr import return_results_from_reestr
 
-# константы
+# константы для изначальной карты
 ZOOM = 16
 DEFAULT_CENTER = [60.0020, 30.3976]
 
@@ -65,7 +67,7 @@ if st.session_state.step == "start":
         dragging=True,
     )
 
-    # убираем политическме надписи в виджете
+    # убираем надписи в виджете
     css_hide_attribution = """
     <style>
     .leaflet-control-attribution {
@@ -94,22 +96,25 @@ if st.session_state.step == "start":
 
 # шаг 2: передача карты в модель
 elif st.session_state.step == "found":
-    lat, lon = st.session_state.map_center
-    coords_str = f"{lat},{lon}"
-    image_url = get_url([lat, lon])
+    # свойста текущего участка карты для провери 
+    st.session_state.lat, st.session_state.lon = st.session_state.map_center
+    st.session_state.coords_str = f"{round(st.session_state.lat, 6)},{round(st.session_state.lon, 6)}"
+    st.session_state.image_url = get_url([st.session_state.lat, st.session_state.lon])
+    # запрос в модель
+    st.session_state.garage_coords = get_coords_from_model([st.session_state.lat, st.session_state.lon])
 
     left, right = st.columns(2)
 
     with left:
         st.image(
-            image_url,
-            caption=f"Область поиска объектов ({lat:.5f}, {lon:.5f})",
+            st.session_state.image_url,
+            caption=f"Центр области поиска объектов ({st.session_state.lat:.6f}, {st.session_state.lon:.6f})",
             width="stretch",
         )
 
     with right:
-        # Получаем и отображаем таблицу найденных объектов
-        table_data = render_garage_data("found", [lat, lon])
+        # отображаем таблицу найденных объектов
+        table_data = render_garage_data("found", st.session_state.garage_coords)
         if table_data:
             st.write("##### Найденные объекты")
             st.table(table_data)
@@ -127,18 +132,21 @@ elif st.session_state.step == "found":
 
 # шаг 3: проверка в Росреестре
 elif st.session_state.step == "checked":
-    lat, lon = st.session_state.map_center
-    coords_str = f"{lat},{lon}"
-    image_url = get_url([lat, lon])
+    # запрос в росеестр
+    property_states = return_results_from_reestr(st.session_state.garage_coords)
 
     left, right = st.columns(2)
 
     with left:
-        st.image(image_url, caption="Область поиска", width="stretch")
+            st.image(
+                st.session_state.image_url,
+                caption=f"Центр области поиска объектов ({st.session_state.lat:.6f}, {st.session_state.lon:.6f})",
+                width="stretch",
+            )
 
     with right:
-        # получаем и отображаем уже обогащённую Росреестром таблицу
-        table_data = render_garage_data("checked", [lat, lon])
+        # отображаем уже обогащённую Росреестром таблицу
+        table_data = render_garage_data("checked", st.session_state.garage_coords, property_states)
         if table_data:
             st.write("##### Найденные объекты")
             st.table(table_data)

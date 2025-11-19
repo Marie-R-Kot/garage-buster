@@ -54,7 +54,7 @@ def get_property_by_coords(lat: float, lon: float) -> dict | None:
 
     return None
 
-def return_answer(coords: str):
+def return_results_from_reestr(coords: list):
     results = []
     for coord in coords:
         lat, lon = [round(float(x), 6) for x in coord.split(', ')]

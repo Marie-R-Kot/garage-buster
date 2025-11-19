@@ -2,10 +2,11 @@ import requests
 import io
 from PIL import Image
 from ultralytics import YOLO
-import os
 from pathlib import Path
+from clients.map_manager import get_world_coord
+from clients.map_manager import get_url
 
-def model_staff(image_url):
+def model_answer(image_url):
     response = requests.get(image_url)
     image = Image.open(io.BytesIO(response.content))
         
@@ -18,7 +19,6 @@ def model_staff(image_url):
     base_dir = Path(__file__).parent.parent
     model_path = base_dir / 'model' / 'best.pt'
     
-    # Проверяем существование файла
     if not model_path.exists():
         raise FileNotFoundError(f"Model file not found at: {model_path}")
     
@@ -42,3 +42,19 @@ def model_staff(image_url):
         coords_list.append([float(x), float(y)])
         
     return coords_list
+
+
+def get_coords_from_model(center_coords):
+    image_url = get_url(center_coords)
+    
+    garages_coords_list = model_answer(image_url)
+    if not garages_coords_list:
+        return None
+    
+    garage_coords = []
+    
+    for coords in garages_coords_list:
+        map_coord = get_world_coord(coords, center_coords)
+        garage_coords.append(map_coord)
+    
+    return garage_coords
