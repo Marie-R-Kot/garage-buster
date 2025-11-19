@@ -2,7 +2,6 @@ import requests
 import io
 from PIL import Image
 from ultralytics import YOLO
-import os
 from pathlib import Path
 
 def model_staff(image_url):
